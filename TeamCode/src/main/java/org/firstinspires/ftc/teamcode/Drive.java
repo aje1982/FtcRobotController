@@ -18,17 +18,12 @@ public class Drive extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private Servo gate;
-    private Servo hood;
     private double targetVelocity = 0;
 
     double intakePower;
-    double hoodPosition;
     int nearVelocity;
     int farVelocity;
     double gateClosePos;
-    String teleOp2;
-    String autoBlue2;
-    String autoRed2;
     double gateOpenPos;
 
 
@@ -42,20 +37,17 @@ public class Drive extends LinearOpMode {
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         gate = hardwareMap.get(Servo.class, "gate");
-        hood = hardwareMap.get(Servo.class, "hood");
         // Put initialization blocks here.
         initRobot();
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 mecanumDrive();
-                manualHoodControl();
                 manualSingleShotControl();
                 intakeControl();
                 gate();
                 setOuttakePower();
                 telemetry.addData("Outtake Speed", outtake.getVelocity());
-                telemetry.addData("Hood Position", hood.getPosition());
                 telemetry.addData("Gate Position", gate.getPosition());
                 telemetry.update();
             }
@@ -77,18 +69,12 @@ public class Drive extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         gate.setDirection(Servo.Direction.FORWARD);
-        hood.setDirection(Servo.Direction.FORWARD);
-        autoBlue2 = "autoBlue";
-        autoRed2 = "autoRed";
-        teleOp2 = "teleOp";
 
         nearVelocity = 1750 ;
         farVelocity = 2800;
         gateOpenPos = 0.3;
         gateClosePos = 0;
         intakePower = 0;
-        hoodPosition = 0.2745;
-        hood.setPosition(hoodPosition);
         gate.setPosition(gateClosePos);
     }
 
@@ -135,31 +121,14 @@ public class Drive extends LinearOpMode {
     }
 
 
-    private void manualHoodControl() {
-        if (gamepad2.circleWasPressed()) {
-            hood.setPosition(0.2745);
-        } else if (gamepad2.dpadUpWasPressed()) {
-            hood.setPosition(hoodPosition + 0.02);
-        } else if (gamepad2.dpadDownWasPressed()) {
-            hood.setPosition(hoodPosition - 0.02);
-        }
-        hoodPosition = hood.getPosition();
-    }
-
 
     private void nearShot() {
         targetVelocity = nearVelocity;
-        if (outtake.getVelocity() >= nearVelocity - 50) {
-            gate.setPosition(gateOpenPos);
-        }
     }
 
 
     private void farShot() {
         targetVelocity = farVelocity;
-        if (outtake.getVelocity() >= farVelocity - 50) {
-            gate.setPosition(gateOpenPos);
-        }
     }
 
 
@@ -169,14 +138,12 @@ public class Drive extends LinearOpMode {
         } else if (gamepad2.leftBumperWasPressed()) {
             farShot();
         } else if (gamepad2.squareWasPressed()) {
-            gate.setPosition(gateClosePos);
             targetVelocity = 0;
             outtake.setPower(0);
         }
     }
 
     private void gate() {
-
         gate.setPosition(gamepad2.right_stick_button ? gateOpenPos : gateClosePos);
     }
 
