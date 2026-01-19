@@ -28,7 +28,6 @@ public class autoRedGoal extends OpMode {
     private DcMotor intake2;
     private DcMotorEx outtake;
     private Servo gate;
-    private Servo hood;
     double intakePower;
     double gateClosePos;
     double gateOpenPos;
@@ -43,7 +42,6 @@ public class autoRedGoal extends OpMode {
         intake2 = hardwareMap.get(DcMotor.class, "intake2");
         outtake = hardwareMap.get(DcMotorEx.class, "outtake");
         gate = hardwareMap.get(Servo.class, "gate");
-        hood = hardwareMap.get(Servo.class, "hood");
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setDirection(DcMotor.Direction.REVERSE);
         intake2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -52,12 +50,10 @@ public class autoRedGoal extends OpMode {
         outtake.setDirection(DcMotor.Direction.REVERSE);
         gate.setDirection(Servo.Direction.FORWARD);
         gate.setPosition(0.3);
-        hood.setDirection(Servo.Direction.FORWARD);
-        hood.setPosition(0.2745);
         nearVelocity = 1750 ;
         farVelocity = 2800;
-        gateOpenPos = 0.1;
-        gateClosePos = 0.3;
+        gateOpenPos = 0.3;
+        gateClosePos = 0;
         intakePower = 0;
         targetVelocity = 0;
 

@@ -16,9 +16,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Auto Red Far", group = "Autonomous")
+@Autonomous(name = "Auto Blue Far", group = "Autonomous")
 @Configurable // Panels
-public class autoRedFar extends OpMode {
+public class autoBlueFar extends OpMode {
 
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
@@ -62,7 +62,7 @@ public class autoRedFar extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(86.903, 8.903, Math.toRadians(270)));
+        follower.setStartingPose(new Pose(57.355, 8.580, Math.toRadians(270)));
 
         paths = new Paths(follower); // Build paths
 
@@ -113,31 +113,30 @@ public class autoRedFar extends OpMode {
 
     public static class Paths {
         public PathChain scorePreload;
-        public PathChain park;
+        public PathChain Path2;
 
         public Paths(Follower follower) {
             scorePreload = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(86.903, 8.903),
+                                    new Pose(57.355, 8.581),
 
-                                    new Pose(81.097, 15.871)
+                                    new Pose(65.871, 16.065)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(252))
+                    ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(290))
 
                     .build();
 
-            park = follower.pathBuilder().addPath(
+            Path2 = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(81.097, 15.871),
+                                    new Pose(65.871, 16.065),
 
-                                    new Pose(108.000, 12.194)
+                                    new Pose(36.548, 14.581)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(252), Math.toRadians(0))
+                    ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(180))
 
                     .build();
         }
     }
-
 
     public int autonomousPathUpdate() {
         // Add your state machine here
@@ -164,12 +163,12 @@ public class autoRedFar extends OpMode {
                     /* Score Preloads */
                     shootArtifacts();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the artifact */
-                    if(pathTimer.getElapsedTimeSeconds() >= 6){
+                    if(pathTimer.getElapsedTimeSeconds() >= 10){
                         gate.setPosition(gateClosePos);
                         targetVelocity = 0;
                         intake.setPower(0);
                         intake2.setPower(0);
-                        follower.followPath(paths.park);
+                        follower.followPath(paths.Path2);
                         setPathState(-1);
                     }
 
